@@ -34,6 +34,34 @@ func Read(r io.Reader) (*ABCFile, error) {
 		}
 	}
 
+	metadataCount, err := readU30(r)
+	if err != nil {
+		return nil, err
+	}
+	abc.Metadata = make([]MetadataInfo, metadataCount)
+	for i := uint32(0); i < metadataCount; i++ {
+		if err := abc.Metadata[i].readMetadata(r); err != nil {
+			return nil, err
+		}
+	}
+
+	classCount, err := readU30(r)
+	if err != nil {
+		return nil, err
+	}
+	abc.Instances = make([]InstanceInfo, classCount)
+	for i := uint32(0); i < classCount; i++ {
+		if err := abc.Instances[i].readInstance(r); err != nil {
+			return nil, err
+		}
+	}
+	// abc.Classes = make([]ClassInfo, classCount)
+	// for i := uint32(0); i < classCount; i++ {
+	// 	if err := abc.Classes[i].readClass(r); err != nil {
+	// 		return nil, err
+	// 	}
+	// }
+
 	return abc, nil
 }
 
