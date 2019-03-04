@@ -62,6 +62,17 @@ func Read(r io.Reader) (*ABCFile, error) {
 		}
 	}
 
+	scriptCount, err := readU30(r)
+	if err != nil {
+		return nil, err
+	}
+	abc.Scripts = make([]ScriptInfo, scriptCount)
+	for i := uint32(0); i < scriptCount; i++ {
+		if err := abc.Scripts[i].readScript(r); err != nil {
+			return nil, err
+		}
+	}
+
 	return abc, nil
 }
 

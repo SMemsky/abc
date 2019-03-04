@@ -9,7 +9,7 @@ type ABCFile struct {
 	Metadata  []MetadataInfo
 	Instances []InstanceInfo
 	Classes   []ClassInfo
-	// Scripts      []ScriptInfo
+	Scripts   []ScriptInfo
 	// MethodBodies []MethodBodyInfo
 }
 
@@ -203,4 +203,9 @@ type InstanceInfo struct {
 type ClassInfo struct {
 	StaticInit uint32 // Methods.
 	Traits     []TraitInfo
+}
+
+type ScriptInfo struct {
+	Init   uint32 // Methods.
+	Traits []TraitInfo
 }
