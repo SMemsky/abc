@@ -5,7 +5,7 @@ type ABCFile struct {
 	Major uint16 // Major 46 supported
 
 	Constants ConstantPool
-	// Methods      []MethodInfo
+	Methods      []MethodInfo
 	// Metadata     []MetadataInfo
 	// Instances    []InstanceInfo
 	// Classes      []ClassInfo
@@ -75,4 +75,46 @@ type MultinameInfo struct {
 	// GenericName.
 	Type   uint32   // Multinames.
 	Params []uint32 // Multinames.
+}
+
+type MethodFlags uint8
+
+const (
+    NeedsArguments MethodFlags = 0x01 // Needs an arguments object. Conflicts with NeedsRest.
+    UsesActivation MethodFlags = 0x02 // Uses newactivation opcode.
+    NeedsRest      MethodFlags = 0x04 // Needs rest arguments array. Conflicts with NeedsArguments.
+    HasOptional    MethodFlags = 0x08 // Has optional parameters.
+    UsesDXNS       MethodFlags = 0x40 // Uses dxns and dxnslate opcodes.
+    HasParamNames  MethodFlags = 0x80 // Has argument names.
+)
+
+type ValueKind uint8
+
+const (
+    SignedInteger   ValueKind = 0x03
+    UnsignedInteger ValueKind = 0x04
+    Double          ValueKind = 0x06
+    String          ValueKind = 0x01
+    True            ValueKind = 0x0B
+    False           ValueKind = 0x0A
+    Null            ValueKind = 0x0C
+    Undefined       ValueKind = 0x00
+)
+
+type MethodInfo struct {
+    ReturnType    uint32   // Multinames. Zero = any.
+    ArgumentTypes []uint32 // Multinames. Zero = any.
+    Name          uint32   // Strings. Zero = no name.
+
+    Flags MethodFlags
+
+    // Only for HasOptional.
+    Defaults []ParamDefaults
+    // Only for HasParamNames.
+    Names []uint32 // Strings. Argument names.
+}
+
+type ParamDefaults struct {
+    Kind  uint8  // Either ValueKind, or NamespaceKind.
+    Index uint32 // Index into corresponding Pool entry.
 }

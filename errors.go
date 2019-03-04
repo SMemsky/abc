@@ -6,6 +6,8 @@ import (
 
 var (
 	ErrBadEncoded   = fmt.Errorf("Malformed encoded value.")
-	ErrBadNamespace = fmt.Errorf("Malformed namespace kind.")
-	ErrBadMultiname = fmt.Errorf("Malformed multiname kind.")
+	ErrBadNamespace = fmt.Errorf("Unknown namespace kind.")
+	ErrBadMultiname = fmt.Errorf("Unknown multiname kind.")
+    ErrRestArguments = fmt.Errorf("Both NEED_REST and NEED_ARGUMENTS specified.")
+    ErrBadOptionKind = fmt.Errorf("Unknown option kind.")
 )

@@ -23,6 +23,17 @@ func Read(r io.Reader) (*ABCFile, error) {
 		return nil, err
 	}
 
+	methodCount, err := readU30(r)
+	if err != nil {
+		return nil, err
+	}
+	abc.Methods = make([]MethodInfo, methodCount)
+	for i := uint32(0); i < methodCount; i++ {
+		if err := abc.Methods[i].readMethods(r); err != nil {
+			return nil, err
+		}
+	}
+
 	return abc, nil
 }
 
