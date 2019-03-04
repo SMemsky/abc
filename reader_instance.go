@@ -2,7 +2,6 @@ package abc
 
 import (
 	"encoding/binary"
-	"fmt"
 	"io"
 )
 
@@ -52,7 +51,6 @@ func (i *InstanceInfo) readInstance(r io.Reader) error {
 	}
 	i.Traits = make([]TraitInfo, traitCount)
 	for j := uint32(0); j < traitCount; j++ {
-		fmt.Println("reading trait", j+1, "/", traitCount)
 		if err := i.Traits[j].readTrait(r); err != nil {
 			return err
 		}

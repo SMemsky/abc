@@ -55,12 +55,12 @@ func Read(r io.Reader) (*ABCFile, error) {
 			return nil, err
 		}
 	}
-	// abc.Classes = make([]ClassInfo, classCount)
-	// for i := uint32(0); i < classCount; i++ {
-	// 	if err := abc.Classes[i].readClass(r); err != nil {
-	// 		return nil, err
-	// 	}
-	// }
+	abc.Classes = make([]ClassInfo, classCount)
+	for i := uint32(0); i < classCount; i++ {
+		if err := abc.Classes[i].readClass(r); err != nil {
+			return nil, err
+		}
+	}
 
 	return abc, nil
 }
