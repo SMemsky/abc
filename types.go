@@ -121,10 +121,10 @@ type ParamDefaults struct {
 
 type MetadataInfo struct {
 	Name  uint32 // Strings.
-	Items []MetadataItems
+	Items []MetadataItemInfo
 }
 
-type MetadataItems struct {
+type MetadataItemInfo struct {
 	Key   uint32 // Strings. Zero = no key.
 	Value uint32 // Strings.
 }

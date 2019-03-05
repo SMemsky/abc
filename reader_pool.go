@@ -241,6 +241,7 @@ func (p *ConstantPool) readMultinames(r io.Reader) error {
 	}
 	p.Multinames = make([]MultinameInfo, multinameCount)
 	for i := uint32(1); i < multinameCount; i++ {
+		fmt.Println(i)
 		if err := p.Multinames[i].read(r); err != nil {
 			return err
 		}
@@ -275,6 +276,7 @@ func (n *MultinameInfo) read(r io.Reader) error {
 	if err := binary.Read(r, binary.LittleEndian, &kind); err != nil {
 		return err
 	}
+	fmt.Println("KIND:", kind)
 	n.Kind = MultinameKind(kind)
 	var err error
 	switch n.Kind {
@@ -283,6 +285,11 @@ func (n *MultinameInfo) read(r io.Reader) error {
 		if err != nil {
 			return err
 		}
+		n.Name, err = readU30(r)
+		if err != nil {
+			return err
+		}
+	case RTQName, RTQNameA:
 		n.Name, err = readU30(r)
 		if err != nil {
 			return err
