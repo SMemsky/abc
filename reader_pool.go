@@ -73,6 +73,17 @@ func Read(r io.Reader) (*ABCFile, error) {
 		}
 	}
 
+	bodyCount, err := readU30(r)
+	if err != nil {
+		return nil, err
+	}
+	abc.MethodBodies = make([]MethodBodyInfo, bodyCount)
+	for i := uint32(0); i < bodyCount; i++ {
+		if err := abc.MethodBodies[i].readBody(r); err != nil {
+			return nil, err
+		}
+	}
+
 	return abc, nil
 }
 

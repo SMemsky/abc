@@ -4,13 +4,13 @@ type ABCFile struct {
 	Minor uint16
 	Major uint16 // Major 46 supported
 
-	Constants ConstantPool
-	Methods   []MethodInfo
-	Metadata  []MetadataInfo
-	Instances []InstanceInfo
-	Classes   []ClassInfo
-	Scripts   []ScriptInfo
-	// MethodBodies []MethodBodyInfo
+	Constants    ConstantPool
+	Methods      []MethodInfo
+	Metadata     []MetadataInfo
+	Instances    []InstanceInfo
+	Classes      []ClassInfo
+	Scripts      []ScriptInfo
+	MethodBodies []MethodBodyInfo
 }
 
 // Each slice holds an additional default value with index 0. This value is not
@@ -208,4 +208,23 @@ type ClassInfo struct {
 type ScriptInfo struct {
 	Init   uint32 // Methods.
 	Traits []TraitInfo
+}
+
+type ExceptionInfo struct {
+	From          uint32
+	To            uint32
+	Target        uint32
+	ExceptionType uint32 // Strings. Zero = any.
+	VarName       uint32 // Strings. Zero = nothing.
+}
+
+type MethodBodyInfo struct {
+	Method         uint32 // Methods.
+	StackLimit     uint32 // AVM2 Stack size limit.
+	LocalCount     uint32 // N+1 registers allowed for use.
+	InitScopeDepth uint32 // Minimum scope depth at entry. Relative to Max depth.
+	MaxScopeDepth  uint32 // Maximum accessible scope depth.
+	RawCode        []byte // Raw instructions.
+	Exceptions     []ExceptionInfo
+	Traits         []TraitInfo
 }
