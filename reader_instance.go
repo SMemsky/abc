@@ -23,9 +23,11 @@ func (i *InstanceInfo) readInstance(r io.Reader) error {
 		return ErrUnknownInstanceFlag
 	}
 	i.Flags = ClassFlags(flags)
-	i.ProtectedNamespace, err = readU30(r)
-	if err != nil {
-		return err
+	if (i.Flags & ProtectedNamespaceClass) != 0 {
+		i.ProtectedNamespace, err = readU30(r)
+		if err != nil {
+			return err
+		}
 	}
 
 	interfaceCount, err := readU30(r)
@@ -51,6 +53,7 @@ func (i *InstanceInfo) readInstance(r io.Reader) error {
 	}
 	i.Traits = make([]TraitInfo, traitCount)
 	for j := uint32(0); j < traitCount; j++ {
+
 		if err := i.Traits[j].readTrait(r); err != nil {
 			return err
 		}

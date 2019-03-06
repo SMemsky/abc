@@ -1,12 +1,9 @@
 package abc
 
 import (
-	// "encoding/binary"
-	// "fmt"
 	"io"
 )
 
-// TODO
 func (m *MetadataInfo) readMetadata(r io.Reader) error {
 	var err error
 	if m.Name, err = readU30(r); err != nil {
@@ -20,6 +17,9 @@ func (m *MetadataInfo) readMetadata(r io.Reader) error {
 
 	m.Items = make([]MetadataItemInfo, itemCount)
 	for i := uint32(0); i < itemCount; i++ {
+		// JPEXS reads itemCount keys and only then itemCount values.
+		// BUT! AVM2 specs define it as an array of key/value pairs!
+		// I.e. it should be read key/value - key/value, not key/key - value/value...?
 		if err := m.Items[i].readMetadataItem(r); err != nil {
 			return err
 		}

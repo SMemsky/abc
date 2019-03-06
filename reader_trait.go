@@ -15,9 +15,12 @@ func (t *TraitInfo) readTrait(r io.Reader) error {
 	if err = binary.Read(r, binary.LittleEndian, &kind); err != nil {
 		return err
 	}
-	if (kind & 0x80) != 0 {
-		return ErrUnknownTraitAttribute
-	}
+	// Unknown attribute :(. Not documented anywhere, other implementations
+	// simply ignore it. Not sure what to do about it.
+	// if (kind & 0x80) != 0 {
+	// 	// fmt.Printf("%02X\n", kind)
+	// 	return ErrUnknownTraitAttribute
+	// }
 	t.Attributes = TraitAttributes(kind >> 4)
 	t.Kind = TraitKind(kind & 0xf)
 

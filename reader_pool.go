@@ -23,6 +23,7 @@ func Read(r io.Reader) (*ABCFile, error) {
 		return nil, err
 	}
 
+
 	methodCount, err := readU30(r)
 	if err != nil {
 		return nil, err
@@ -33,6 +34,7 @@ func Read(r io.Reader) (*ABCFile, error) {
 			return nil, err
 		}
 	}
+
 
 	metadataCount, err := readU30(r)
 	if err != nil {
@@ -45,6 +47,7 @@ func Read(r io.Reader) (*ABCFile, error) {
 		}
 	}
 
+
 	classCount, err := readU30(r)
 	if err != nil {
 		return nil, err
@@ -55,12 +58,15 @@ func Read(r io.Reader) (*ABCFile, error) {
 			return nil, err
 		}
 	}
+
+
 	abc.Classes = make([]ClassInfo, classCount)
 	for i := uint32(0); i < classCount; i++ {
 		if err := abc.Classes[i].readClass(r); err != nil {
 			return nil, err
 		}
 	}
+
 
 	scriptCount, err := readU30(r)
 	if err != nil {
@@ -72,6 +78,7 @@ func Read(r io.Reader) (*ABCFile, error) {
 			return nil, err
 		}
 	}
+
 
 	bodyCount, err := readU30(r)
 	if err != nil {
@@ -241,7 +248,6 @@ func (p *ConstantPool) readMultinames(r io.Reader) error {
 	}
 	p.Multinames = make([]MultinameInfo, multinameCount)
 	for i := uint32(1); i < multinameCount; i++ {
-		fmt.Println(i)
 		if err := p.Multinames[i].read(r); err != nil {
 			return err
 		}
@@ -276,7 +282,6 @@ func (n *MultinameInfo) read(r io.Reader) error {
 	if err := binary.Read(r, binary.LittleEndian, &kind); err != nil {
 		return err
 	}
-	fmt.Println("KIND:", kind)
 	n.Kind = MultinameKind(kind)
 	var err error
 	switch n.Kind {
@@ -326,7 +331,6 @@ func (n *MultinameInfo) read(r io.Reader) error {
 			}
 		}
 	default:
-		fmt.Println(n.Kind)
 		return ErrBadMultiname
 	}
 	return nil
